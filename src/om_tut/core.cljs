@@ -157,6 +157,24 @@
                      "O"
                      "X"))))
 
+(defn build-board [data]
+  (for [r (split-board-rows (:game-board data))]
+    (apply dom/tr nil
+           (for [c r]
+             (dom/td nil
+                     (if-let [s (:symbol c)]
+                       (dom/button #js {:onClick #(js/alert "You can't go there")
+                                        :style #js {:background-color "#373737"
+                                                    :color "#FFF"
+                                                    :height "100px"
+                                                    :width "100px"}}
+                                   s)
+
+                       (dom/button #js {:onClick #(move data (:position c))
+                                        :style #js {:height "100px"
+                                                    :width "100px"}}
+                                   "Open")))))))
+
 (defn current-game [data owner]
   (reify
     om/IRender
@@ -166,22 +184,7 @@
                      (dom/table
                       nil
                       (apply dom/tbody nil
-                             (for [r (split-board-rows (:game-board data))]
-                               (apply dom/tr nil
-                                      (for [c r]
-                                        (dom/td nil
-                                                (if-let [s (:symbol c)]
-                                                  (dom/button #js {:onClick #(js/alert "You can't go there")
-                                                                   :style #js {:background-color "#373737"
-                                                                               :color "#FFF"
-                                                                               :height "100px"
-                                                                               :width "100px"}}
-                                                              s)
-
-                                                  (dom/button #js {:onClick #(move data (:position c))
-                                                                   :style #js {:height "100px"
-                                                                               :width "100px"}}
-                                                              "Open"))))))))))))
+                             (build-board data)))))))
 
 
 (om/root current-game app-state
