@@ -121,13 +121,13 @@
     ;; Checks if board is full
     (if (board-full? board)
       (om/transact! data :game-board
-                                  #(make-new-board))
+                    #(make-new-board))
       ;; Check for a winner
       (if-let [winner (check-winner formatted-board)]
         (do
           (js/alert (str "The WINNER is....." winner "!!!"))
           (om/transact! data :game-board
-                                  #(make-new-board)))
+                        #(make-new-board)))
         board))))
 
 ;;; ====================================================================================
@@ -159,29 +159,29 @@
 
 (defn current-game [data owner]
   (reify
-    om/IRenderState
-    (render-state [this state]
-                  (dom/div #js {:id "current-game"}
-                           (dom/h2 nil (str "Whoever is " (:whos-turn data) "'s You're up!!!"))
-                           (dom/table
-                            nil
-                            (apply dom/tbody nil
-                                   (for [r (split-board-rows (:game-board data))]
-                                     (apply dom/tr nil
-                                            (for [c r]
-                                              (dom/td nil
-                                                      (if-let [s (:symbol c)]
-                                                        (dom/button #js {:onClick #(js/alert "You can't go there")
-                                                                         :style #js {:background-color "#373737"
-                                                                                     :color "#FFF"
-                                                                                     :height "100px"
-                                                                                     :width "100px"}}
-                                                                    s)
+    om/IRender
+    (render [this]
+            (dom/div #js {:id "current-game"}
+                     (dom/h2 nil (str "Whoever is " (:whos-turn data) "'s You're up!!!"))
+                     (dom/table
+                      nil
+                      (apply dom/tbody nil
+                             (for [r (split-board-rows (:game-board data))]
+                               (apply dom/tr nil
+                                      (for [c r]
+                                        (dom/td nil
+                                                (if-let [s (:symbol c)]
+                                                  (dom/button #js {:onClick #(js/alert "You can't go there")
+                                                                   :style #js {:background-color "#373737"
+                                                                               :color "#FFF"
+                                                                               :height "100px"
+                                                                               :width "100px"}}
+                                                              s)
 
-                                                        (dom/button #js {:onClick #(move data (:position c))
-                                                                         :style #js {:height "100px"
-                                                                                     :width "100px"}}
-                                                                    "Open"))))))))))))
+                                                  (dom/button #js {:onClick #(move data (:position c))
+                                                                   :style #js {:height "100px"
+                                                                               :width "100px"}}
+                                                              "Open"))))))))))))
 
 
 (om/root current-game app-state
