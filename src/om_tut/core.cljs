@@ -4,25 +4,7 @@
             [om.dom :as dom :include-macros true]
             [cljs.core.async :refer [put! chan <!]]
             [clojure.data :as data]
-            [clojure.string :as string]
-            [re-com.core :refer [button
-                                 info-button
-                                 input-text
-                                 input-textarea
-                                 datepicker-dropdown
-                                 v-box
-                                 hyperlink
-                                 h-box
-                                 gap
-                                 throbber
-                                 checkbox
-                                 input-time
-                                 title
-                                 label
-                                 box
-                                 scroller
-                                 progress-bar
-                                 md-icon-button]]))
+            [clojure.string :as string]))
 
 (enable-console-print!)
 
